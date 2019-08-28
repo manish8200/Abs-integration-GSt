@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+	
+<grid name="partner-customer-grid" title="Customers" model="com.axelor.apps.base.db.Partner" orderBy="name">
+	 	<menubar>
+	        <menu title="Reports" icon="fa-files-o" showTitle="true">
+	            <item title="Contact PhoneBook" action="action-print-phonebook"/>
+	            <item title="Company phoneBook" action="action-print-company-phonebook" if="__config__.app.isApp('employee')"/>
+	        </menu>
+	        <menu title="Tools" icon="fa-wrench" showTitle="true">
+	            <item title="Check Duplicate" action="action-general-check-duplicate-records"/>
+	            <item title="Merge duplicated" action="action-validate-select-object-message,action-duplicate-object-wizard-open"/>
+	        </menu>
+	    </menubar>
+	    <field name="partnerSeq" width="120"/>
+	    <field name="simpleFullName"/>
+		<field name="fixedPhone"/>
+		<field name="emailAddress.address" placeholder="whatever@example.com"
+		  title="Email"/>
+		<field name="partnerCategory" grid-view="partner-category-grid" form-view="partner-category-form"/>
+		<field name="fiscalPosition.code" title="Fiscal position"/>
+		<field name="registrationCode" />
+		<field name="mainAddress"/>
+		<field name="companyStr" />
+		<button name="scheduleEventBtn" title="Schedule Event" icon="fa-group" onClick="action-partner-view-schedule-event" if-module="axelor-crm" if="__config__.app.isApp('crm')"/>
+		<button name="sendByEmailBtn" title="Send Email"  icon="fa-envelope" onClick="action-send-by-email-with-template" if-module="axelor-crm" if="__config__.app.isApp('crm')"/>
+	</grid>
+
+	<grid name="partner-supplier-grid" title="Suppliers" model="com.axelor.apps.base.db.Partner" orderBy="name">
+	    <menubar>
+	        <menu title="Reports" icon="fa-files-o" showTitle="true">
+	            <item title="Contact PhoneBook" action="action-print-phonebook"/>
+	            <item title="Company phoneBook" action="action-print-company-phonebook" if="__config__.app.isApp('employee')"/>
+	        </menu>
+	        <menu title="Tools" icon="fa-wrench" showTitle="true">
+	            <item title="Check Duplicate" action="action-general-check-duplicate-records"/>
+	            <item title="Merge duplicated" action="action-validate-select-object-message,action-duplicate-object-wizard-open"/>
+	        </menu>
+	    </menubar>
+	    <field name="partnerSeq" width="120" />
+		<field name="simpleFullName"/>
+		<field name="fixedPhone"/>
+		<field name="emailAddress.address" placeholder="whatever@example.com"
+		  title="Email"/>
+		<field name="partnerCategory" grid-view="partner-category-grid" form-view="partner-category-form"/>
+		<field name="fiscalPosition.code" title="Fiscal position"/>
+		<field name="registrationCode" />
+		<field name="mainAddress"/>
+		<field name="companyStr" />
+		<button name="scheduleEventBtn" title="Schedule Event" icon="fa-group" onClick="action-partner-view-schedule-event" if-module="axelor-crm" if="__config__.app.isApp('crm')"/>
+		<button name="sendByEmailBtn" title="Send Email" icon="fa-envelope" onClick="action-send-by-email-with-template" if-module="axelor-crm"  if="__config__.app.isApp('crm')"/>
+	</grid>
+
+	<grid name="partner-contact-grid" title="Contacts" model="com.axelor.apps.base.db.Partner">
+		<toolbar>
+			<button name="checkDuplicateBtn" title="Check Duplicate" onClick="action-general-check-duplicate-records"/>
+			<button name="replaceDuplicateBtn" title="Merge duplicated" onClick="action-validate-select-object-message,action-duplicate-object-wizard-open"/>
+		</toolbar>
+    	<field name="partnerSeq" width="120"/>
+		<field name="simpleFullName"/>
+		<field name="fixedPhone"/>
+		<field name="mobilePhone"/>
+		<field name="emailAddress.address" placeholder="whatever@example.com"
+		  title="Email"/>
+		<field name="mainPartner.simpleFullName" title="Main company"/>
+		<field name="jobTitle"/>
+		<button name="scheduleEventBtn" title="Schedule Event" icon="fa-group" onClick="action-contact-partner-view-schedule-event" if-module="axelor-crm" if="__config__.app.isApp('crm')"/>
+		<button name="sendByEmailBtn" title="Send Email" icon="fa-envelope" onClick="action-send-by-email-with-template" if-module="axelor-crm"  if="__config__.app.isApp('crm')"/>
+	</grid>
+
+	<grid name="partner-grid-group" title="Partner" model="com.axelor.apps.base.db.Partner" groupBy="user">
+    	<field name="partnerSeq" width="120"/>
+		<field name="simpleFullName"/>
+		<field name="fixedPhone"/>
+		<field name="mobilePhone"/>
+		<field name="gstin"/>
+		<field name="emailAddress.address" title="Email"/>
+		<field name="user" form-view="user-form" grid-view="user-grid"/>
+	</grid>
+	
+		<form name="partner-form"  title="Partner" model="com.axelor.apps.base.db.Partner" id="partner-form-include-gstin"
+		  onNew="action-group-base-partner-onnew"
+		  onLoad="action-group-partner-onload"
+		  onSave="action-partner-iban-check-on-save" width="large">
+		  <panel-include view="partner-form" from="axelor-base"  />
+
+		<panel>
+		  <field name="gstin" />
+		  </panel>
+		  </form>
+	
+	
+	
+	</object-views>
