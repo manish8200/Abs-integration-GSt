@@ -92,7 +92,7 @@ public class Invoice extends AuditableModel {
 
 	@Widget(title = "Document Subtype", selection = "iinvoice.operation.sub.type.select")
 	@NotNull
-	private Integer operationSubTypeSelect = 0;
+	private Integer operationSubTypeSelect = 1;
 
 	@Widget(title = "Customer tax number")
 	private String partnerTaxNbr;
