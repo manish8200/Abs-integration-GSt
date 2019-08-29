@@ -27,13 +27,6 @@ public class StateRepository extends JpaRepository<State> {
 		super(State.class);
 	}
 
-	public State findByCode(String code) {
-		return Query.of(State.class)
-				.filter("self.code = :code")
-				.bind("code", code)
-				.fetchOne();
-	}
-
 	public State findByName(String name) {
 		return Query.of(State.class)
 				.filter("self.name = :name")

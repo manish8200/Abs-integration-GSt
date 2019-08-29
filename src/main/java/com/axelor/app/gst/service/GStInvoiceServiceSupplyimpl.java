@@ -2,7 +2,9 @@ package com.axelor.app.gst.service;
 
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
+import com.axelor.apps.account.db.Tax;
 import com.axelor.apps.account.db.TaxLine;
+import com.axelor.apps.account.db.repo.TaxRepository;
 import com.axelor.apps.account.service.AccountManagementAccountService;
 import com.axelor.apps.account.service.AnalyticMoveLineService;
 import com.axelor.apps.account.service.app.AppAccountService;
@@ -13,6 +15,7 @@ import com.axelor.apps.gst.db.State;
 import com.axelor.apps.purchase.service.PurchaseProductService;
 import com.axelor.apps.supplychain.service.InvoiceLineSupplychainService;
 import com.axelor.exception.AxelorException;
+import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
@@ -37,14 +40,18 @@ public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
         analyticMoveLineService,
         accountManagementAccountService,
         purchaseProductService);
-    // TODO Auto-generated constructor stub
   }
 
   @Override
   public Map<String, Object> fillProductInformation(Invoice invoice, InvoiceLine invoiceLine)
       throws AxelorException {
-
     Map<String, Object> productInformation = super.fillProductInformation(invoice, invoiceLine);
+
+    Tax tax = Beans.get(TaxRepository.class).all().filter("self.code = 'GST' ").fetchOne();
+    TaxLine Activetaxline = tax.getActiveTaxLine();
+    Activetaxline.setValue(invoiceLine.getProduct().getGstRate());
+    invoiceLine.setTaxLine(Activetaxline);
+
     boolean isPurchase = InvoiceToolService.isPurchase(invoice);
     TaxLine taxline = null;
     BigDecimal productprice = BigDecimal.ZERO;
@@ -53,9 +60,7 @@ public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
     } else {
       productprice = invoiceLine.getPrice();
     }
-
     productInformation.put("price", productprice);
-
     State companyaddress = invoice.getCompany().getAddress().getStates();
     State partneraddress = invoice.getAddress().getStates();
     BigDecimal qty = invoiceLine.getQty();
@@ -84,17 +89,24 @@ public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
         igst = BigDecimal.ZERO,
         cGst = BigDecimal.ZERO,
         sgst = BigDecimal.ZERO;
+    if (invoice.getPartner() != null || invoice.getInvoiceLineList() != null) {
 
-    Collection<InvoiceLine> inline = invoice.getInvoiceLineList();
-    for (InvoiceLine invoiceLine : inline) {
-      grossamount = grossamount.add(invoiceLine.getGrossAmount());
-      igst = igst.add(invoiceLine.getiGst());
-      cGst = cGst.add(invoiceLine.getcGst());
-      sgst = sgst.add(invoiceLine.getsGSt());
+      Collection<InvoiceLine> inline = invoice.getInvoiceLineList();
+      for (InvoiceLine invoiceLine : inline) {
+        grossamount = grossamount.add(invoiceLine.getGrossAmount());
+        igst = igst.add(invoiceLine.getiGst());
+        cGst = cGst.add(invoiceLine.getcGst());
+        sgst = sgst.add(invoiceLine.getsGSt());
+      }
+      response.setValue("grossAmount", grossamount);
+      response.setValue("sGst", sgst);
+      response.setValue("cGst", cGst);
+      response.setValue("iGst", igst);
+    } else {
+      response.setValue("grossAmount", BigDecimal.ZERO);
+      response.setValue("sGst", BigDecimal.ZERO);
+      response.setValue("cGst", BigDecimal.ZERO);
+      response.setValue("iGst", BigDecimal.ZERO);
     }
-    response.setValue("grossAmount", grossamount);
-    response.setValue("sGst", sgst);
-    response.setValue("cGst", cGst);
-    response.setValue("iGst", igst);
   }
 }

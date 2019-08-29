@@ -11,7 +11,7 @@
 	<form model="com.axelor.apps.gst.db.State" title="States" name="state-from">
 	<panel title="State Details">
 	<field name="name"/>
-	<field name="code"/>
+
 	</panel>
 	</form>
 	

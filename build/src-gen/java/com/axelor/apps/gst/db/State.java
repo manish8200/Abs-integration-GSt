@@ -40,7 +40,7 @@ import com.google.common.base.MoreObjects;
  * \
  */
 @Entity
-@Table(name = "GST_STATE", indexes = { @Index(columnList = "name"), @Index(columnList = "code") })
+@Table(name = "GST_STATE", indexes = { @Index(columnList = "name") })
 public class State extends AuditableModel {
 
 	@Id
@@ -52,9 +52,6 @@ public class State extends AuditableModel {
 	@NameColumn
 	private String name;
 
-	@Widget(title = "State Code")
-	private String code;
-
 	@Widget(title = "Attributes")
 	@Basic(fetch = FetchType.LAZY)
 	@Type(type = "json")
@@ -63,9 +60,8 @@ public class State extends AuditableModel {
 	public State() {
 	}
 
-	public State(String name, String code) {
+	public State(String name) {
 		this.name = name;
-		this.code = code;
 	}
 
 	@Override
@@ -84,14 +80,6 @@ public class State extends AuditableModel {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getAttrs() {
@@ -126,7 +114,6 @@ public class State extends AuditableModel {
 		return MoreObjects.toStringHelper(this)
 			.add("id", getId())
 			.add("name", getName())
-			.add("code", getCode())
 			.omitNullValues()
 			.toString();
 	}

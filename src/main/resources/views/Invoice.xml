@@ -75,7 +75,7 @@
         </panel>
 
         <panel name="invoicingInfoPanel" title="Invoicing informations" hideIf="company == null">
-            <field name="partner" canEdit="false" readonlyIf="statusSelect != 1 || invoiceLineList.length > 0" onChange="action-group-account-invoice-partner-onchange,action-method-invoice-address-str" onSelect="action-set-partner-domain" form-view="partner-form" grid-view="partner-grid"/>
+            <field name="partner" canEdit="false" readonlyIf="statusSelect != 1 || invoiceLineList.length > 1000" onChange="action-group-account-invoice-partner-onchange,action-method-invoice-address-str,action-method-invoicelineitem-set-in-invoice" onSelect="action-set-partner-domain" form-view="partner-form" grid-view="partner-grid"/>
             <field name="contactPartner" canEdit="false" onSelect="action-set-partner-domain" domain="self.isContact = true AND :company member of self.companySet" readonlyIf="partner != null &amp;&amp; partner.partnerTypeSelect == 2" form-view="partner-contact-form" grid-view="partner-contact-grid"/>
     		<field name="$partnerBankDetailsListWarning" showTitle="false" hidden="true" readonly="true" colSpan="12">
       			<viewer><![CDATA[
@@ -283,7 +283,7 @@ InvoiceSet.length > 0))"
 				</viewer>
 			</field>
 		</panel>
-		<panel title="Gst Calculations" >
+		<panel sidebar="true" title="Gst Calculations" itemSpan="6" hideIf="partner == null || company == null || currency == null" >
 		<field name="grossAmount" readonly="true"/>
 		<field name="iGst" readonly="true"/>
 		<field name="cGSt" readonly="true"/>
@@ -322,6 +322,10 @@ InvoiceSet.length > 0))"
 	
 	<action-method name="action-method-product-create-invoice">
 	<call class="com.axelor.app.gst.db.web.ProductController" method="getproductasinvoice"/>
+	</action-method>
+	
+	<action-method name="action-invoice-line-method-get-product-information">
+		<call class="com.axelor.apps.account.web.InvoiceLineController" method="getProductInformation"/>
 	</action-method>
 	
 </object-views>
