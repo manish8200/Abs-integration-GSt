@@ -21,11 +21,7 @@
 	    <button name="sendByEmailBtn" title="Send Email" icon="fa-envelope" onClick="action-send-by-email-with-template"/>
 	</grid>
     
- <action-view name="action-create-product-invoice-onclick-createinvoicebtn" title="create product Invoice"
-		model="com.axelor.apps.account.db.Invoice">
-		<view type="form" name="gst-invoice-form" />
-		<context name="productId" expr="eval: _ids"/>
-	</action-view> 
+
  
 
 	<form name="product-form" title="Product" id="product-form-gst"
@@ -315,5 +311,11 @@
 	 <action-record name="action-product-getGst-onchange-productCategory" model="com.axelor.apps.base.db.Product">
  <field name="gstRate" expr="eval: productCategory.gstRate"/>
  </action-record>
+ 
+  <action-view name="action-create-product-invoice-onclick-createinvoicebtn" title="create product Invoice"
+		model="com.axelor.apps.account.db.Invoice">
+		<view type="form" name="gst-invoice-form" />
+		<context name="productId" expr="eval: _ids"/>
+	</action-view> 
 
 </object-views>

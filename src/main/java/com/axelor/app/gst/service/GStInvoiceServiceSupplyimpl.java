@@ -2,6 +2,7 @@ package com.axelor.app.gst.service;
 
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
+import com.axelor.apps.account.db.InvoiceLineTax;
 import com.axelor.apps.account.db.Tax;
 import com.axelor.apps.account.db.TaxLine;
 import com.axelor.apps.account.db.repo.TaxRepository;
@@ -20,7 +21,9 @@ import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
@@ -89,11 +92,15 @@ public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
         igst = BigDecimal.ZERO,
         cGst = BigDecimal.ZERO,
         sgst = BigDecimal.ZERO;
+    List<InvoiceLineTax> inlinelist = new ArrayList<InvoiceLineTax>();
+    
+    
     if (invoice.getPartner() != null || invoice.getInvoiceLineList() != null) {
-
+    
       Collection<InvoiceLine> inline = invoice.getInvoiceLineList();
       for (InvoiceLine invoiceLine : inline) {
         grossamount = grossamount.add(invoiceLine.getGrossAmount());
+        
         igst = igst.add(invoiceLine.getiGst());
         cGst = cGst.add(invoiceLine.getcGst());
         sgst = sgst.add(invoiceLine.getsGSt());
