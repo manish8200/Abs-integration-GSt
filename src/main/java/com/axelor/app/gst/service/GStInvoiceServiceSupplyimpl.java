@@ -1,8 +1,10 @@
 package com.axelor.app.gst.service;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
-import com.axelor.apps.account.db.InvoiceLineTax;
 import com.axelor.apps.account.db.Tax;
 import com.axelor.apps.account.db.TaxLine;
 import com.axelor.apps.account.db.repo.TaxRepository;
@@ -17,14 +19,7 @@ import com.axelor.apps.purchase.service.PurchaseProductService;
 import com.axelor.apps.supplychain.service.InvoiceLineSupplychainService;
 import com.axelor.exception.AxelorException;
 import com.axelor.inject.Beans;
-import com.axelor.rpc.ActionRequest;
-import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
 
@@ -86,31 +81,4 @@ public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
     return productInformation;
   }
 
-  public void setinvoiceitemIninvoice(ActionRequest request, ActionResponse response) {
-    Invoice invoice = request.getContext().asType(Invoice.class);
-    BigDecimal grossamount = BigDecimal.ZERO,
-        igst = BigDecimal.ZERO,
-        cGst = BigDecimal.ZERO,
-        sgst = BigDecimal.ZERO;
-    if (invoice.getPartner() != null || invoice.getInvoiceLineList() != null) {
-
-      Collection<InvoiceLine> inline = invoice.getInvoiceLineList();
-      for (InvoiceLine invoiceLine : inline) {
-        grossamount = grossamount.add(invoiceLine.getGrossAmount());
-
-        igst = igst.add(invoiceLine.getiGst());
-        cGst = cGst.add(invoiceLine.getcGst());
-        sgst = sgst.add(invoiceLine.getsGSt());
-      }
-      response.setValue("grossAmount", grossamount);
-      response.setValue("sGst", sgst);
-      response.setValue("cGst", cGst);
-      response.setValue("iGst", igst);
-    } else {
-      response.setValue("grossAmount", BigDecimal.ZERO);
-      response.setValue("sGst", BigDecimal.ZERO);
-      response.setValue("cGst", BigDecimal.ZERO);
-      response.setValue("iGst", BigDecimal.ZERO);
-    }
-  }
 }

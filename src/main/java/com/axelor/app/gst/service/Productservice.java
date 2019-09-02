@@ -7,10 +7,13 @@ import java.util.List;
 
 public interface Productservice {
 
-  List<InvoiceLine> setproductasinvoice(Invoice invoice, List<Integer> productIds);
+	List<InvoiceLine> setproductasinvoice(Invoice invoice, List<Integer> productIds);
 
-  List<InvoiceLineTax> setinvoicelineastaxline(Invoice invoice);
+	List<InvoiceLineTax> setinvoicelineastaxline(Invoice invoice);
 
-  Invoice setInvoiceGst(Invoice invoice);
-  List<InvoiceLine> setinlinecalculation(Invoice invoice);
+	Invoice setInvoiceGst(Invoice invoice);
+
+	List<InvoiceLine> setinlinecalculation(Invoice invoice);
+	
+	Invoice setTotal(Invoice invoice);
 }

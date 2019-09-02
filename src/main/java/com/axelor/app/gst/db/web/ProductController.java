@@ -35,9 +35,13 @@ public class ProductController extends JpaSupport {
    List<InvoiceLine> invoicelinelist = productService.setinlinecalculation(invoice);
     List<InvoiceLineTax> inlinetax = productService.setinvoicelineastaxline(invoice);
     Invoice invoice2 = productService.setInvoiceGst(invoice);
-    
-    response.setValues(invoice2);
+        response.setValues(invoice2);
     response.setValue("invoiceLineTaxList", inlinetax);
     response.setValue("invoiceLineList", invoicelinelist);
+    Invoice invoice3 = productService.setTotal(invoice);
+    
+
+    response.setValue("taxTotal", invoice3.getTaxTotal());
+
   }
 }

@@ -78,16 +78,17 @@ public class Productserviceimpl implements Productservice {
 			invoiceLine2.setsGSt(BigDecimal.ZERO);
 			invoiceLine2.setiGst(invoiceLine2.getTaxLine().getValue().multiply(invoiceLine2.getExTaxTotal()));
 			invoiceLine2.setGrossAmount(invoiceLine2.getiGst().add(invoiceLine2.getExTaxTotal()));
+			invoiceLine2.setInTaxTotal(invoiceLine2.getGrossAmount());
 			inline.add(invoiceLine2);
 			}else
 			{
-			//	Cgst = Divisiblegst.multiply(invoiceLine2.getExTaxTotal());
 				invoiceLine2.setiGst(BigDecimal.ZERO);
 				invoiceLine2.setcGst(invoiceLine2.getTaxLine().getValue()
 						.divide(new BigDecimal(2))
 						.multiply(invoiceLine2.getExTaxTotal()));
 				invoiceLine2.setsGSt(invoiceLine2.getcGst());
-				invoiceLine2.setGrossAmount(invoiceLine2.getcGst().add(invoiceLine2.getExTaxTotal()));  ;
+				invoiceLine2.setGrossAmount(invoiceLine2.getcGst().add(invoiceLine2.getExTaxTotal())); 
+				invoiceLine2.setInTaxTotal(invoiceLine2.getGrossAmount());
 				inline.add(invoiceLine2);
 			}
 		}
@@ -100,6 +101,7 @@ public Invoice setInvoiceGst(Invoice invoice) {
 	 BigDecimal grossamount = BigDecimal.ZERO,
 		        igst = BigDecimal.ZERO,
 		        cGst = BigDecimal.ZERO,
+		        intaxtotal = BigDecimal.ZERO,
 		        sgst = BigDecimal.ZERO;
 
 	List<InvoiceLine> invoiceLine = invoice.getInvoiceLineList();
@@ -108,11 +110,29 @@ public Invoice setInvoiceGst(Invoice invoice) {
 		igst = igst.add(invoiceLine2.getiGst());
 		cGst = cGst.add(invoiceLine2.getcGst());
 		sgst = sgst.add(invoiceLine2.getsGSt());
+		intaxtotal = intaxtotal.add(invoiceLine2.getInTaxTotal());
+		
 		 	}
+	invoice.setTaxTotal(sgst);
 	invoice.setGrossAmount(grossamount);
 	invoice.setiGst(igst);
 	invoice.setcGSt(cGst);
 	invoice.setsGSt(sgst);
+	invoice.setInTaxTotal(intaxtotal);
+	return invoice;
+}
+
+@Override
+public Invoice setTotal(Invoice invoice) {
+	// TODO Auto-generated method stub
+	BigDecimal taxtotal = BigDecimal.ZERO, Extaxtotal =BigDecimal.ZERO;
+	List<InvoiceLineTax> inlintax = invoice.getInvoiceLineTaxList();
+	for (InvoiceLineTax invoiceLineTax : inlintax) {
+		taxtotal = taxtotal.add(invoiceLineTax.getTaxTotal());
+		Extaxtotal = Extaxtotal.add(invoiceLineTax.getExTaxBase());
+	}
+	invoice.setExTaxTotal(Extaxtotal);
+	invoice.setTaxTotal(taxtotal);
 	return invoice;
 }
 }
