@@ -92,15 +92,12 @@ public class GStInvoiceServiceSupplyimpl extends InvoiceLineSupplychainService {
         igst = BigDecimal.ZERO,
         cGst = BigDecimal.ZERO,
         sgst = BigDecimal.ZERO;
-    List<InvoiceLineTax> inlinelist = new ArrayList<InvoiceLineTax>();
-    
-    
     if (invoice.getPartner() != null || invoice.getInvoiceLineList() != null) {
-    
+
       Collection<InvoiceLine> inline = invoice.getInvoiceLineList();
       for (InvoiceLine invoiceLine : inline) {
         grossamount = grossamount.add(invoiceLine.getGrossAmount());
-        
+
         igst = igst.add(invoiceLine.getiGst());
         cGst = cGst.add(invoiceLine.getcGst());
         sgst = sgst.add(invoiceLine.getsGSt());

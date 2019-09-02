@@ -75,7 +75,7 @@
         </panel>
 
         <panel name="invoicingInfoPanel" title="Invoicing informations" hideIf="company == null">
-            <field name="partner" canEdit="false" readonlyIf="statusSelect != 1 || invoiceLineList.length > 1000" onChange="action-group-account-invoice-partner-onchange,action-method-invoice-address-str,action-method-parteneronchange-invoiecalculation,action-method-invoicelineitem-set-in-invoice,action-method-partneOnChange-set-taxlinelist" onSelect="action-set-partner-domain" form-view="partner-form" grid-view="partner-grid"/>
+            <field name="partner" canEdit="false" readonlyIf="statusSelect != 1 || invoiceLineList.length > 1000" onChange="action-group-account-invoice-partner-onchange,action-method-invoice-address-str,action-method-partneOnChange-set-taxlinelist" onSelect="action-set-partner-domain" form-view="partner-form" grid-view="partner-grid"/>
             <field name="contactPartner" canEdit="false" onSelect="action-set-partner-domain" domain="self.isContact = true AND :company member of self.companySet" readonlyIf="partner != null &amp;&amp; partner.partnerTypeSelect == 2" form-view="partner-contact-form" grid-view="partner-contact-grid"/>
     		<field name="$partnerBankDetailsListWarning" showTitle="false" hidden="true" readonly="true" colSpan="12">
       			<viewer><![CDATA[
@@ -331,9 +331,6 @@ InvoiceSet.length > 0))"
 	<action-method name="action-method-partneOnChange-set-taxlinelist">
 	<call class="com.axelor.app.gst.db.web.ProductController" method="setinvoiceLineastaxline"/>
 	</action-method>
-	
-	<action-method name="action-method-parteneronchange-invoiecalculation">
-	<call class="com.axelor.app.gst.db.web.ProductController" method="invoicelinecalculation"/>
-	</action-method>
+
 	
 </object-views>
